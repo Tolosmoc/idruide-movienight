@@ -8,17 +8,17 @@ export default async function Home() {
   const trending: Movie[] = await tmdbService.getTrending();
 
   return (
-    <div className="min-h-screen text-white bg-gradient-to-b from-orange-900 via-gray-900 to-black">
+    <div className="min-h-screen text-white bg-gradient-to-b from-gray-950 via-gray-900 to-black">
       <Header />
 
       {/* HERO SECTION */}
-      <div className="px-4 pt-8">
+      <div className="px-6 pt-6">
         <HeroSection movie={trending[0]} />
       </div>
 
-      <main className="container mx-auto px-4 pb-16">
-        <MovieRow title="À l'affiche cette semaine" movies={trending.slice(0, 10)} />
-        <MovieRow title="Les films les mieux notés" movies={trending.slice(5, 15)} />
+      <main className="container mx-auto px-6 pb-20">
+        <MovieRow title="A l'affiche cette semaine" movies={trending.slice(0, 12)} />
+        <MovieRow title="Les films les mieux notes" movies={trending.slice(5, 17)} />
       </main>
     </div>
   );
