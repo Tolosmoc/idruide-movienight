@@ -10,6 +10,14 @@ const nextConfig = {
       },
     ],
   },
+  
+  reactStrictMode: true,
+  webpack: (config) => {
+    config.ignoreWarnings = [
+      { module: /node_modules\/baseui/ },
+    ];
+    return config;
+  },
 };
 
 export default nextConfig;
