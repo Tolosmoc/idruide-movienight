@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { SearchBar } from '@/components/SearchBar';
+import { SearchBar } from './SearchBar';
+import styles from './Header.module.css';
 
 export function Header() {
   return (
-    <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between gap-4">
-          <Link href="/" className="text-2xl font-bold text-white hover:text-gray-300 transition">
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <div className={styles.content}>
+          <Link href="/" className={styles.logo}>
             MOVIENIGHT
           </Link>
-          <div className="flex-1 max-w-2xl">
+          <div className={styles.searchContainer}>
             <SearchBar />
           </div>
         </div>
