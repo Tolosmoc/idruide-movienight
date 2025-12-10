@@ -87,13 +87,24 @@ export function SearchBar() {
               handleSearch(query);
             }
           }}
-          placeholder="Rechercher un film, un réalisateur, un acteur"
+          placeholder="Rechercher un film, un realisateur, un acteur"
           startEnhancer={<Search size={24} />}
           overrides={{
             Root: {
               style: {
                 backgroundColor: '#1f2937',
-                border: '1px solid #374151',
+                borderTopWidth: '1px',
+                borderRightWidth: '1px',
+                borderBottomWidth: '1px',
+                borderLeftWidth: '1px',
+                borderTopStyle: 'solid',
+                borderRightStyle: 'solid',
+                borderBottomStyle: 'solid',
+                borderLeftStyle: 'solid',
+                borderTopColor: '#374151',
+                borderRightColor: '#374151',
+                borderBottomColor: '#374151',
+                borderLeftColor: '#374151',
               },
             },
             Input: {
