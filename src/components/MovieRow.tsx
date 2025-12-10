@@ -3,48 +3,69 @@
 import { Movie } from "@/types/movie";
 import { MovieCard } from "./MovieCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import styles from "./MovieRow.module.css";
 
 export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) {
   const ref = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
 
   const scroll = (amount: number) => {
-    ref.current?.scrollBy({ left: amount, behavior: "smooth" });
+    if (ref.current) {
+      ref.current.scrollBy({ left: amount, behavior: "smooth" });
+      
+      setTimeout(() => {
+        if (ref.current) {
+          setShowLeftArrow(ref.current.scrollLeft > 0);
+          setShowRightArrow(
+            ref.current.scrollLeft < ref.current.scrollWidth - ref.current.clientWidth - 10
+          );
+        }
+      }, 300);
+    }
   };
 
   return (
-    <section className="mb-12">
-      <h2 className="text-2xl font-bold mb-6">{title}</h2>
+    <section className={styles.section}>
+      <h2 className={styles.title}>{title}</h2>
 
-      <div className="relative group">
-        {/* Left Arrow */}
-        <button
-          onClick={() => scroll(-600)}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          aria-label="Scroll left"
-        >
-          <ChevronLeft size={24} />
-        </button>
+      <div className={styles.container}>
+        {showLeftArrow && (
+          <button
+            onClick={() => scroll(-900)}
+            className={`${styles.arrow} ${styles.arrowLeft}`}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft size={32} strokeWidth={3} />
+          </button>
+        )}
 
-        {/* Movie List */}
         <div
           ref={ref}
-          className="flex gap-4 overflow-x-auto no-scrollbar px-2 py-2"
-          style={{ scrollbarWidth: 'none' }}
+          className={styles.movieList}
+          onScroll={(e) => {
+            const target = e.currentTarget;
+            setShowLeftArrow(target.scrollLeft > 0);
+            setShowRightArrow(
+              target.scrollLeft < target.scrollWidth - target.clientWidth - 10
+            );
+          }}
         >
           {movies.map((m) => (
             <MovieCard key={m.id} movie={m} />
           ))}
         </div>
 
-        {/* Right Arrow */}
-        <button
-          onClick={() => scroll(600)}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-black/80 p-3 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          aria-label="Scroll right"
-        >
-          <ChevronRight size={24} />
-        </button>
+        {showRightArrow && (
+          <button
+            onClick={() => scroll(900)}
+            className={`${styles.arrow} ${styles.arrowRight}`}
+            aria-label="Scroll right"
+          >
+            <ChevronRight size={32} strokeWidth={3} />
+          </button>
+        )}
       </div>
     </section>
   );
