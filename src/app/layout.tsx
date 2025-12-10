@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MovieNight - Recherche de films",
-  description: "Trouvez votre prochain film à regarder",
+  description: "Trouvez votre prochain film a regarder",
 };
 
 export default function RootLayout({
