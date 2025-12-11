@@ -13,6 +13,14 @@ export const tmdbService = {
         return data.results;
     },
 
+    async getTopRated(): Promise<Movie[]> {
+        const response = await fetch(
+            `${API_URL}/movie/top_rated?api_key=${API_KEY}`
+        );
+        const data: TMDBResponse = await response.json();
+        return data.results;
+    },
+
     async searchMovies(query: string): Promise<Movie[]> {
         const response = await fetch(
             `${API_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
