@@ -42,7 +42,7 @@ export function MovieCard({ movie, showRating = false }: MovieCardProps) {
   };
 
   return (
-    <Link href={`/film/${movie.id}`} className={styles.card}>
+    <Link href={`/movie/${movie.id}`} className={styles.card}>
       <div>
         <div className={styles.posterContainer}>
           {movie.poster_path ? (
