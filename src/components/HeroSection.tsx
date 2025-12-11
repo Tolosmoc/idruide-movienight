@@ -14,7 +14,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselMovies.length);
-    }, 5000);
+    }, 3500); // Changed from 5000 to 3500 for faster transitions
 
     return () => clearInterval(interval);
   }, [carouselMovies.length]);
@@ -74,12 +74,31 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
         }
 
         if (glowRef.current) {
-          glowRef.current.style.background = `radial-gradient(ellipse 900px 600px at 50% 25%, rgba(${r}, ${g}, ${b}, 0.3) 0%, rgba(${r}, ${g}, ${b}, 0.15) 40%, transparent 70%)`;
+          // Apply radial gradient on top of the linear gradient
+          glowRef.current.style.background = `
+            radial-gradient(ellipse 900px 600px at 50% 25%, rgba(${r}, ${g}, ${b}, 0.3) 0%, rgba(${r}, ${g}, ${b}, 0.15) 40%, transparent 70%),
+            linear-gradient(to bottom, 
+              transparent 0%, 
+              transparent 60%, 
+              rgba(43, 43, 43, 0.3) 75%,
+              rgba(43, 43, 43, 0.7) 85%,
+              #2b2b2b 100%
+            )
+          `;
         }
       } catch (error) {
         console.error('Error extracting color:', error);
         if (glowRef.current) {
-          glowRef.current.style.background = `radial-gradient(ellipse 900px 600px at 50% 25%, rgba(255, 255, 255, 0.15) 0%, transparent 70%)`;
+          glowRef.current.style.background = `
+            radial-gradient(ellipse 900px 600px at 50% 25%, rgba(255, 255, 255, 0.15) 0%, transparent 70%),
+            linear-gradient(to bottom, 
+              transparent 0%, 
+              transparent 60%, 
+              rgba(43, 43, 43, 0.3) 75%,
+              rgba(43, 43, 43, 0.7) 85%,
+              #2b2b2b 100%
+            )
+          `;
         }
       }
     };
@@ -99,17 +118,26 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
     <section className={styles.heroSection}>
       {/* Dynamic color-based glow effect with blurred image */}
       <div className={styles.glowContainer}>
-        {currentMovie.backdrop_path && (
-          <Image
-            src={tmdbService.getBackdropURL(currentMovie.backdrop_path)}
-            alt=""
-            width={1200}
-            height={600}
-            className={styles.glowBlurredImage}
-            loading="eager"
-            priority
-          />
-        )}
+        <div 
+          className={styles.glowTrack}
+          style={{ transform: `translateY(-${currentIndex * 33.333}%)` }}
+        >
+          {carouselMovies.map((movie) => (
+            <div key={movie.id} className={styles.glowSlide}>
+              {movie.backdrop_path && (
+                <Image
+                  src={tmdbService.getBackdropURL(movie.backdrop_path)}
+                  alt=""
+                  width={1200}
+                  height={600}
+                  className={styles.glowBlurredImage}
+                  loading="eager"
+                  priority
+                />
+              )}
+            </div>
+          ))}
+        </div>
         <div ref={glowRef} className={styles.glowColorOverlay} />
       </div>
 

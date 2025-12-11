@@ -1,7 +1,7 @@
 .heroSection {
   position: relative;
   width: 100%;
-  height: 480px;
+  height: 350px; /* Reduced from 400px to 350px */
   margin: 3rem auto 2.5rem;
   overflow: visible;
   transition: all 0.5s ease;
@@ -9,13 +9,14 @@
 }
 
 .heroInner {
-  max-width: 1200px;
+  max-width: 1400px; /* Changed from 1200px to 1400px to match MovieRow */
   margin: 0 auto;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  padding: 0 1rem; /* Added padding to match MovieRow */
 }
 
 .carouselWrapper {
@@ -25,39 +26,68 @@
 }
 
 .glowContainer {
-  position: fixed;
+  position: absolute;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
+  top: -200px; /* Start 200px above the hero section */
+  height: 900px; /* Extended height to cover top area + hero + bottom fade */
   z-index: 0;
   pointer-events: none;
-  transition: all 0.5s ease;
+  overflow: hidden;
+}
+
+.glowTrack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 300%;
+  transition: transform 0.5s ease-in-out; /* Changed from 0.7s to 0.5s */
+  gap: 0; /* Ensure no gap between slides */
+}
+
+.glowSlide {
+  width: 100%;
+  height: 33.333%;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden; /* Hide content that extends beyond the slide */
+  margin: 0; /* Remove any margin */
+  padding: 0; /* Remove any padding */
 }
 
 .glowBlurredImage {
   position: absolute;
   left: 0;
-  top: 25%;
+  top: calc(15% + 100px); /* User's preferred positioning */
   transform: translateY(-50%);
   width: 100vw;
-  height: 600px;
+  height: 800px; /* Increased from 600px to 800px */
   object-fit: cover;
-  filter: blur(30px);
+  filter: blur(40px); /* Increased from 30px to 40px */
   opacity: 0.6;
-  transition: opacity 0.5s ease;
+  margin: 0; /* Remove any margin */
+  padding: 0; /* Remove any padding */
+  display: block; /* Remove inline spacing */
 }
 
 .glowColorOverlay {
   position: absolute;
   inset: 0;
   transition: background 0.5s ease;
+  /* Gradient that fades to page background only at the bottom */
+  background: linear-gradient(to bottom, 
+    transparent 0%, 
+    transparent 60%, 
+    rgba(43, 43, 43, 0.3) 75%,
+    rgba(43, 43, 43, 0.7) 85%,
+    #2b2b2b 100%
+  );
 }
 
 .carouselContainer {
   position: relative;
   width: 100%;
-  max-width: 900px;
+  max-width: 1200px; /* Increased from 900px to match wider layout */
   height: 100%;
   margin: 0 auto;
   border-radius: 1rem;
@@ -70,7 +100,7 @@
   flex-direction: column;
   width: 100%;
   height: 300%;
-  transition: transform 0.7s ease-in-out;
+  transition: transform 0.5s ease-in-out; /* Changed from 0.7s to 0.5s */
 }
 
 .carouselSlide {
@@ -99,7 +129,7 @@
   position: absolute;
   bottom: 2.5rem;
   left: 2.5rem;
-  max-width: 36rem;
+  max-width: 28rem; /* Reduced from 36rem to 28rem for smaller title width */
   z-index: 10;
 }
 
