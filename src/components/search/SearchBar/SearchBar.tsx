@@ -63,7 +63,7 @@ export function SearchBar() {
   };
 
   const handleSelectMovie = (movieId: number) => {
-    router.push(`/film/${movieId}`);
+    router.push(`/movie/${movieId}`);
     setQuery('');
     setSuggestions([]);
     setIsOpen(false);

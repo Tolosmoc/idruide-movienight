@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Movie } from "@/types/movie";
 import { tmdbService } from "@/services/tmdb";
@@ -10,6 +11,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselMovies = movies.slice(0, 3);
   const glowRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -42,14 +44,12 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
 
-        // Sample colors from multiple areas of the image
         const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const data = imageData.data;
 
         let r = 0, g = 0, b = 0;
         let count = 0;
 
-        // Sample every 10th pixel for better performance
         for (let i = 0; i < data.length; i += 40) {
           r += data[i];
           g += data[i + 1];
@@ -61,7 +61,6 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
         g = Math.floor(g / count);
         b = Math.floor(b / count);
 
-        // Boost saturation and brightness
         const max = Math.max(r, g, b);
         const min = Math.min(r, g, b);
         const saturation = max === 0 ? 0 : (max - min) / max;
@@ -107,6 +106,11 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index);
+  };
+
+  const handleMoreInfo = () => {
+    const currentMovie = carouselMovies[currentIndex];
+    router.push(`/film/${currentMovie.id}`);
   };
 
   if (!carouselMovies.length) return null;
@@ -182,7 +186,10 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
                 Regarder
               </button>
 
-              <button className={styles.btnInfo}>
+              <button 
+                className={styles.btnInfo}
+                onClick={handleMoreInfo}
+              >
                 En savoir plus
               </button>
             </div>
