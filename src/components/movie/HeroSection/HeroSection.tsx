@@ -14,7 +14,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselMovies.length);
-    }, 3500);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [carouselMovies.length]);
