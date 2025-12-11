@@ -44,11 +44,15 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
         
         if (cardLeft < 0) {
           const visibleWidth = rect.width + cardLeft;
-          opacity = Math.max(0.2, Math.min(1, visibleWidth / rect.width));
+          const visiblePercentage = visibleWidth / rect.width;
+          // If less than 90% visible, apply gray-out effect
+          opacity = visiblePercentage < 0.9 ? 0.3 : 1;
         }
         else if (cardRight > containerWidth) {
           const visibleWidth = containerWidth - cardLeft;
-          opacity = Math.max(0.2, Math.min(1, visibleWidth / rect.width));
+          const visiblePercentage = visibleWidth / rect.width;
+          // If less than 90% visible, apply gray-out effect
+          opacity = visiblePercentage < 0.9 ? 0.3 : 1;
         }
         
         newOpacities.push(opacity);

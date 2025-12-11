@@ -42,17 +42,17 @@ export function MovieCard({ movie, showRating = false }: MovieCardProps) {
   };
 
   return (
-    <Link href={`/movie/${movie.id}`} className={styles.card}>
+    <Link href={`/film/${movie.id}`} className={styles.card}>
       <div>
         <div className={styles.posterContainer}>
           {movie.poster_path ? (
             <Image
               src={tmdbService.getImageUrl(movie.poster_path, 'w342')}
               alt={movie.title}
-              width={160}
-              height={240}
+              width={140}
+              height={200}
               className={styles.poster}
-              sizes="160px"
+              sizes="140px"
             />
           ) : (
             <div className={styles.noImage}>

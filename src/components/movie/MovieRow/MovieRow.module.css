@@ -1,9 +1,9 @@
 .section {
   margin-bottom: 3rem;
-  max-width: 1400px;
+  width: 1072px;
   margin-left: auto;
   margin-right: auto;
-  padding: 0 1rem;
+  padding: 0;
   position: relative;
   z-index: 10;
 }
@@ -12,7 +12,7 @@
   font-size: 1.25rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  padding: 0 4rem;
+  padding-left: 72px;
   color: #ffffff !important;
   opacity: 1 !important;
   background: none !important;
@@ -27,19 +27,21 @@
   position: relative;
   background-color: transparent;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-top: 100px;
   gap: 0;
 }
 
 .scrollWrapper {
   position: relative;
-  flex: 1;
+  width: 896px;
   overflow: hidden;
+  margin-top: -100px;
 }
 
 .movieList {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
   overflow-x: scroll;
   padding: 1rem 0;
   scroll-behavior: smooth;
