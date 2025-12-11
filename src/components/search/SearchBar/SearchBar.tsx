@@ -6,6 +6,8 @@ import { tmdbService } from '@/services/tmdb';
 import { Movie } from '@/types/movie';
 import styles from './SearchBar.module.css';
 import Image from 'next/image';
+import { Search } from 'baseui/icon';
+import { ArrowRight } from 'baseui/icon';
 
 export function SearchBar() {
   const [query, setQuery] = useState('');
@@ -24,7 +26,6 @@ export function SearchBar() {
 
     const searchDebounce = setTimeout(async () => {
       try {
-        // Call API directly to get total_results count
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(query)}`
         );
@@ -75,18 +76,7 @@ export function SearchBar() {
   return (
     <div className={styles.searchContainer} ref={containerRef}>
       <div className={`${styles.searchWrapper} ${query.length > 0 ? styles.searchWrapperActive : ''}`}>
-        <svg 
-          className={styles.searchIcon}
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
+        <Search size={24} className={styles.searchIcon} />
         
         <input
           type="text"
@@ -141,17 +131,7 @@ export function SearchBar() {
                   </div>
                 </div>
 
-                <svg 
-                  className={styles.arrowIcon}
-                  width="20" 
-                  height="20" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
+                <ArrowRight size={20} className={styles.arrowIcon} />
               </div>
             ))}
           </div>

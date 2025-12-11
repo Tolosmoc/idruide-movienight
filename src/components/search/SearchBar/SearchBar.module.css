@@ -178,9 +178,13 @@
 }
 
 .arrowIcon {
-  color: #4b5563;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
+  color: #1f2937 !important;
+  opacity: 1 !important;
+}
+
+.arrowIcon svg {
+  color: #1f2937 !important;
+  fill: #1f2937 !important;
 }
 
 .suggestionItem:hover .arrowIcon {

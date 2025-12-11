@@ -4,6 +4,7 @@ import { Movie } from "@/types/movie";
 import { MovieCard } from "@/components/movie/MovieCard/MovieCard";
 import { useRef, useState, useEffect } from "react";
 import styles from "./MovieRow.module.css";
+import { ArrowLeft, ArrowRight } from 'baseui/icon';
 
 interface MovieRowProps {
   title: string;
@@ -83,19 +84,7 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
           aria-label="Scroll left"
           disabled={!canScrollLeft}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="2" y1="12" x2="22" y2="12" />
-            <polyline points="9 5 2 12 9 19" />
-          </svg>
+          <ArrowLeft size={40} />
         </button>
 
         {/* Movies */}
@@ -126,19 +115,7 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
           aria-label="Scroll right"
           disabled={!canScrollRight}
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="2" y1="12" x2="22" y2="12" />
-            <polyline points="15 5 22 12 15 19" />
-          </svg>
+          <ArrowRight size={64} />
         </button>
       </div>
     </section>

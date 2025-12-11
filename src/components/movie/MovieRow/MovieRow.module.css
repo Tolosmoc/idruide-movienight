@@ -66,15 +66,13 @@
   justify-content: center;
   flex-shrink: 0;
   width: 64px;
-  height: 40px;
+  height: 39.62705612182617px;
   padding: 10px 20px;
   gap: 10px;
   opacity: 1;
 }
 
 .arrow svg {
-  width: 24px;
-  height: 20px;
   transition: transform 0.2s ease;
   opacity: 1;
 }
