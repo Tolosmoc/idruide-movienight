@@ -16,7 +16,7 @@ export default async function Home() {
 
       <main className="container mx-auto px-6 pb-20">
         <MovieRow title="A l'affiche cette semaine" movies={trending.slice(0, 12)} />
-        <MovieRow title="Les films les mieux notes" movies={trending.slice(5, 17)} />
+        <MovieRow title="Les films les mieux notes" movies={trending.slice(5, 17)} showRating={true} />
       </main>
     </div>
   );

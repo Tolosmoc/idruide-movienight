@@ -5,7 +5,13 @@ import { MovieCard } from "./MovieCard";
 import { useRef, useState, useEffect } from "react";
 import styles from "./MovieRow.module.css";
 
-export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) {
+interface MovieRowProps {
+  title: string;
+  movies: Movie[];
+  showRating?: boolean;
+}
+
+export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -15,14 +21,12 @@ export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) 
     if (ref.current) {
       const { scrollLeft, scrollWidth, clientWidth } = ref.current;
       
-      // Can scroll left if we're not at the start
       const atStart = scrollLeft <= 5;
       const atEnd = scrollLeft >= scrollWidth - clientWidth - 5;
       
       setCanScrollLeft(!atStart);
       setCanScrollRight(!atEnd);
       
-      // Calculate opacity for each card based on its position
       const cards = ref.current.children;
       const newOpacities: number[] = [];
       
@@ -31,19 +35,16 @@ export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) 
         const rect = card.getBoundingClientRect();
         const containerRect = ref.current.getBoundingClientRect();
         
-        // Calculate how much of the card is visible
         const cardLeft = rect.left - containerRect.left;
         const cardRight = rect.right - containerRect.left;
         const containerWidth = containerRect.width;
         
         let opacity = 1;
         
-        // Fade on the left side
         if (cardLeft < 0) {
           const visibleWidth = rect.width + cardLeft;
           opacity = Math.max(0.2, Math.min(1, visibleWidth / rect.width));
         }
-        // Fade on the right side
         else if (cardRight > containerWidth) {
           const visibleWidth = containerWidth - cardLeft;
           opacity = Math.max(0.2, Math.min(1, visibleWidth / rect.width));
@@ -97,7 +98,7 @@ export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) 
           </svg>
         </button>
 
-        {/* Movie list */}
+        {/* Movies */}
         <div className={styles.scrollWrapper}>
           <div
             ref={ref}
@@ -112,7 +113,7 @@ export function MovieRow({ title, movies }: { title: string; movies: Movie[] }) 
                   transition: 'opacity 0.3s ease'
                 }}
               >
-                <MovieCard movie={m} />
+                <MovieCard movie={m} showRating={showRating} />
               </div>
             ))}
           </div>
