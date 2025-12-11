@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { MovieDetails } from '@/types/movie';
 import { tmdbService } from '@/services/tmdb';
 import { Header } from '@/components/layout/Header/Header';
+import { LoadingScreen } from '@/components/loading/LoadingScreen';
 import styles from './MovieDetail.module.css';
 import { ArrowRight } from 'baseui/icon';
 import TriangleRight from 'baseui/icon/triangle-right';
@@ -32,10 +33,13 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [cast, setCast] = useState<Cast[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchMovieData = async () => {
+      const startTime = Date.now();
+      
       try {
         const movieDetails = await tmdbService.getMovieDetails(movieId);
         setMovie(movieDetails);
@@ -55,8 +59,24 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
         if (movieDetails.backdrop_path) {
           extractColor(movieDetails.backdrop_path);
         }
+
+        // Calculate remaining time to ensure minimum 2.5 seconds loading
+        const elapsedTime = Date.now() - startTime;
+        const minimumLoadingTime = 2500; // 2.5 seconds
+        const remainingTime = Math.max(0, minimumLoadingTime - elapsedTime);
+        
+        // Wait for remaining time before hiding loading screen
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
       } catch (error) {
         console.error('Error fetching movie data:', error);
+        // Even on error, wait minimum time before showing error
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 2500 - elapsedTime);
+        setTimeout(() => {
+          setLoading(false);
+        }, remainingTime);
       }
     };
 
@@ -127,11 +147,17 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
     }
   };
 
+  // Show loading screen during initial load
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  // Show error state if movie failed to load
   if (!movie) {
     return (
       <div className={styles.page}>
         <Header />
-        <div className={styles.loading}>Chargement...</div>
+        <div className={styles.loading}>Film non trouvé</div>
       </div>
     );
   }
