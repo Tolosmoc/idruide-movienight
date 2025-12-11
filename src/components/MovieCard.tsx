@@ -5,8 +5,32 @@ import Link from "next/link";
 import { Movie } from "@/types/movie";
 import { tmdbService } from "@/services/tmdb";
 import styles from "./MovieCard.module.css";
+import { useState, useEffect } from "react";
 
 export function MovieCard({ movie }: { movie: Movie }) {
+  const [runtime, setRuntime] = useState<number | null>(null);
+
+  useEffect(() => {
+    // Fetch movie details to get runtime
+    const fetchRuntime = async () => {
+      try {
+        const details = await tmdbService.getMovieDetails(movie.id);
+        setRuntime(details.runtime);
+      } catch (error) {
+        console.error('Error fetching movie details:', error);
+      }
+    };
+    
+    fetchRuntime();
+  }, [movie.id]);
+
+  const formatDuration = (minutes: number | null) => {
+    if (!minutes) return null;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h${mins.toString().padStart(2, '0')}m`;
+  };
+
   return (
     <Link href={`/film/${movie.id}`} className={styles.card}>
       <div>
@@ -29,18 +53,11 @@ export function MovieCard({ movie }: { movie: Movie }) {
 
         <div className={styles.info}>
           <h3 className={styles.title}>{movie.title}</h3>
-
-          <div className={styles.metadata}>
-            <span className={styles.year}>
-              {movie.release_date?.slice(0, 4) || "N/A"}
-            </span>
-            {movie.vote_average > 0 && (
-              <span className={styles.rating}>
-                <span className={styles.star}>⭐</span>
-                <span>{movie.vote_average.toFixed(1)}</span>
-              </span>
-            )}
-          </div>
+          {runtime && (
+            <div className={styles.duration}>
+              {formatDuration(runtime)}
+            </div>
+          )}
         </div>
       </div>
     </Link>

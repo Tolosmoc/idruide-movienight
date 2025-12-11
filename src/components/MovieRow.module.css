@@ -1,30 +1,42 @@
 .section {
   margin-bottom: 3rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1rem;
 }
 
 .title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1.25rem;
-  padding: 0 0.5rem;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-bottom: 1rem;
+  padding: 0 4rem;
+  color: #ffffff;
 }
 
 .container {
   position: relative;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0;
 }
 
-.container:hover .arrow {
-  opacity: 1;
+.scrollWrapper {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
 }
 
 .movieList {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   overflow-x: scroll;
-  padding: 0.5rem;
+  padding: 1rem 0;
   scroll-behavior: smooth;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: relative;
 }
 
 .movieList::-webkit-scrollbar {
@@ -32,30 +44,45 @@
 }
 
 .arrow {
-  position: absolute;
-  top: 45%;
-  transform: translateY(-50%);
+  position: relative;
   z-index: 20;
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 0.75rem;
-  border-radius: 9999px;
+  background-color: rgba(30, 30, 30, 0.9);
+  border-radius: 50px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 68px;
+  height: 52px;
+  opacity: 1;
 }
 
-.arrow:hover {
-  background-color: rgba(0, 0, 0, 0.95);
-  transform: translateY(-50%) scale(1.1);
+.arrow svg {
+  transition: transform 0.2s ease;
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .arrowLeft {
-  left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.arrowLeft:hover:not(:disabled) svg {
+  transform: translateX(-3px);
 }
 
 .arrowRight {
-  right: 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.arrowRight:hover:not(:disabled) svg {
+  transform: translateX(3px);
 }
