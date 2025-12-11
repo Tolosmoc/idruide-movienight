@@ -10,7 +10,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     const [engine, setEngine] = useState<Client | null>(null);
 
     useEffect(() => {
-        // dynamically import Styletron only on the client
         import('styletron-engine-atomic').then(({ Client }) => {
             setEngine(new Client());
         });

@@ -65,7 +65,6 @@ export function MovieCard({ movie, showRating = false }: MovieCardProps) {
           <h3 className={styles.title}>{movie.title}</h3>
           
           {showRating ? (
-            // Rating with progress bar
             <div className={styles.ratingContainer}>
               <div className={styles.ratingBar}>
                 <div 
@@ -76,7 +75,6 @@ export function MovieCard({ movie, showRating = false }: MovieCardProps) {
               <span className={styles.ratingText}>{formatRating(movie.vote_average)}</span>
             </div>
           ) : (
-            // Duration
             runtime && (
               <div className={styles.duration}>
                 {formatDuration(runtime)}

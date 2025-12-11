@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { SearchBar } from './SearchBar';
+import { SearchBar } from '@/components/search/SearchBar/SearchBar';
 import styles from './Header.module.css';
 import { useState, useEffect } from 'react';
 

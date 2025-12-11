@@ -14,7 +14,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % carouselMovies.length);
-    }, 3500); // Changed from 5000 to 3500 for faster transitions
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [carouselMovies.length]);
@@ -74,7 +74,6 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
         }
 
         if (glowRef.current) {
-          // Apply radial gradient on top of the linear gradient
           glowRef.current.style.background = `
             radial-gradient(ellipse 900px 600px at 50% 25%, rgba(${r}, ${g}, ${b}, 0.3) 0%, rgba(${r}, ${g}, ${b}, 0.15) 40%, transparent 70%),
             linear-gradient(to bottom, 
@@ -116,7 +115,6 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
 
   return (
     <section className={styles.heroSection}>
-      {/* Dynamic color-based glow effect with blurred image */}
       <div className={styles.glowContainer}>
         <div 
           className={styles.glowTrack}

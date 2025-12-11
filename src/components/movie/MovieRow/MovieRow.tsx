@@ -1,7 +1,7 @@
 "use client";
 
 import { Movie } from "@/types/movie";
-import { MovieCard } from "./MovieCard";
+import { MovieCard } from "@/components/movie/MovieCard/MovieCard";
 import { useRef, useState, useEffect } from "react";
 import styles from "./MovieRow.module.css";
 
