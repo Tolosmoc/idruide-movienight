@@ -93,8 +93,8 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <line x1="19" y1="12" x2="5" y2="12" />
-            <polyline points="12 19 5 12 12 5" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <polyline points="9 5 2 12 9 19" />
           </svg>
         </button>
 
@@ -136,8 +136,8 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <polyline points="15 5 22 12 15 19" />
           </svg>
         </button>
       </div>
