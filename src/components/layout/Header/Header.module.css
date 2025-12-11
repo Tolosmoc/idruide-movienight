@@ -13,9 +13,9 @@
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem 0;
+  padding: 1rem;
 }
 
 .content {
@@ -39,7 +39,7 @@
 }
 
 .searchContainer {
-  flex: 1;
-  max-width: 42rem;
+  width: 500px;
+  flex-shrink: 0;
   opacity: 0.85;
 }
