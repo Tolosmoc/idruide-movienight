@@ -110,7 +110,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
 
   const handleMoreInfo = () => {
     const currentMovie = carouselMovies[currentIndex];
-    router.push(`/film/${currentMovie.id}`);
+    router.push(`/movie/${currentMovie.id}`);
   };
 
   if (!carouselMovies.length) return null;
