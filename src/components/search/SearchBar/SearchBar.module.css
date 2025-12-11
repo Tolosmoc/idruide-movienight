@@ -9,9 +9,11 @@
   background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  padding: 0 1rem;
   transition: all 0.2s ease;
+  width: 436px;
+  height: 44px;
 }
 
 .searchWrapperActive {
@@ -72,7 +74,7 @@
   position: absolute;
   top: calc(100% + 0.5rem);
   right: 0;
-  width: 100%;
+  width: 436px;
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;

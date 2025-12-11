@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Movie } from "@/types/movie";
 import { tmdbService } from "@/services/tmdb";
@@ -10,6 +11,7 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const carouselMovies = movies.slice(0, 3);
   const glowRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -109,6 +111,11 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
     setCurrentIndex(index);
   };
 
+  const handleMoreInfo = () => {
+    const currentMovie = carouselMovies[currentIndex];
+    router.push(`/movie/${currentMovie.id}`);
+  };
+
   if (!carouselMovies.length) return null;
 
   const currentMovie = carouselMovies[currentIndex];
@@ -183,9 +190,12 @@ export function HeroSection({ movies }: { movies: Movie[] }) {
                   Regarder
                 </button>
 
-                <button className={styles.btnInfo}>
-                  En savoir plus
-                </button>
+                <button 
+                className={styles.btnInfo}
+                onClick={handleMoreInfo}
+              >
+                En savoir plus
+              </button>
               </div>
             </div>
           </div>
