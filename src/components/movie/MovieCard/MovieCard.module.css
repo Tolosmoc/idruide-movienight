@@ -71,11 +71,12 @@
 }
 
 .ratingBar {
-  flex: 1;
+  width: 80px;
   height: 4px;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: 2px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .ratingFill {
