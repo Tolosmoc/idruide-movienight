@@ -45,14 +45,14 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
         if (cardLeft < 0) {
           const visibleWidth = rect.width + cardLeft;
           const visiblePercentage = visibleWidth / rect.width;
-          // If less than 90% visible, apply gray-out effect
-          opacity = visiblePercentage < 0.9 ? 0.3 : 1;
+          
+          opacity = visiblePercentage < 0.99 ? 0.3 : 1;
         }
         else if (cardRight > containerWidth) {
           const visibleWidth = containerWidth - cardLeft;
           const visiblePercentage = visibleWidth / rect.width;
-          // If less than 90% visible, apply gray-out effect
-          opacity = visiblePercentage < 0.9 ? 0.3 : 1;
+          
+          opacity = visiblePercentage < 0.99 ? 0.3 : 1;
         }
         
         newOpacities.push(opacity);
@@ -83,7 +83,7 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
       <div className={styles.container}>
         {/* Left arrow */}
         <button
-          onClick={() => scroll(-900)}
+          onClick={() => scroll(-328)}
           className={`${styles.arrow} ${styles.arrowLeft}`}
           aria-label="Scroll left"
           disabled={!canScrollLeft}
@@ -114,7 +114,7 @@ export function MovieRow({ title, movies, showRating = false }: MovieRowProps) {
 
         {/* Right arrow */}
         <button
-          onClick={() => scroll(900)}
+          onClick={() => scroll(328)}
           className={`${styles.arrow} ${styles.arrowRight}`}
           aria-label="Scroll right"
           disabled={!canScrollRight}
