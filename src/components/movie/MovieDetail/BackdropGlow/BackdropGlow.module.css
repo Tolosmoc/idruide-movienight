@@ -1,0 +1,28 @@
+/* BackdropGlow styles */
+
+.backdropContainer {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 600px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.backdropBlurred {
+  object-fit: cover;
+  filter: blur(40px);
+  opacity: 0.6;
+}
+
+.backdropOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 40%,
+    rgba(43, 43, 43, 0.5) 60%,
+    rgba(43, 43, 43, 0.8) 75%,
+    #2b2b2b 100%
+  );
+}

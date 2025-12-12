@@ -1,0 +1,111 @@
+/* TrailersSection styles */
+
+.section {
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.videosGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 344px);
+  gap: 1.5rem;
+}
+
+.videoCard {
+  cursor: pointer;
+}
+
+.videoThumbnail {
+  position: relative;
+  width: 344px;
+  height: 193px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(31, 41, 55);
+}
+
+.videoImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.videoCard:hover .playOverlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.playIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  color: #ffffff;
+}
+
+.playIcon svg {
+  width: 60px;
+  height: 60px;
+}
+
+.videoCard:hover .playIcon {
+  transform: scale(1.1);
+}
+
+.videoTitle {
+  font-size: 0.875rem;
+  color: rgb(209, 213, 219);
+  line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .videosGrid {
+    grid-template-columns: repeat(2, 344px);
+  }
+}
+
+@media (max-width: 900px) {
+  .videosGrid {
+    grid-template-columns: 344px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .videoThumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+
+  .videosGrid {
+    grid-template-columns: 1fr;
+  }
+}
