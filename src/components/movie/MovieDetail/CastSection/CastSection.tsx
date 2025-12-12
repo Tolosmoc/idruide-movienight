@@ -19,6 +19,9 @@ interface CastSectionProps {
 export function CastSection({ cast }: CastSectionProps) {
   if (cast.length === 0) return null;
 
+  // Show button only if there are more than 10 cast members
+  const showButton = cast.length > 10;
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Casting</h2>
@@ -45,12 +48,14 @@ export function CastSection({ cast }: CastSectionProps) {
           </div>
         ))}
         
-        <div className={styles.viewAllCard}>
-          <div className={styles.viewAllContent}>
-            <span>Voir tout</span>
-            <ArrowRight size={20} />
+        {showButton && (
+          <div className={styles.viewAllCard}>
+            <div className={styles.viewAllContent}>
+              <span>Voir tout</span>
+              <ArrowRight size={20} />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );
