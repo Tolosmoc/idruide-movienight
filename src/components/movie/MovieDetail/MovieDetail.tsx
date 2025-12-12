@@ -34,53 +34,87 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
   const [cast, setCast] = useState<Cast[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchMovieData = async () => {
+    const fetchMovieDataAndPreloadImages = async () => {
       const startTime = Date.now();
       
       try {
-        const movieDetails = await tmdbService.getMovieDetails(movieId);
+        const [movieDetails, creditsData, videosData] = await Promise.all([
+          tmdbService.getMovieDetails(movieId),
+          fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          ).then(res => res.json()),
+          fetch(
+            `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
+          ).then(res => res.json())
+        ]);
+
         setMovie(movieDetails);
-
-        const creditsResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movieId}/credits?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
-        );
-        const creditsData = await creditsResponse.json();
         setCast(creditsData.cast?.slice(0, 11) || []);
-
-        const videosResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_TMDB_API_URL}/movie/${movieId}/videos?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`
-        );
-        const videosData = await videosResponse.json();
         setVideos(videosData.results?.filter((v: Video) => v.site === 'YouTube').slice(0, 3) || []);
+
+        const imagesToPreload: string[] = [];
+        
+        if (movieDetails.backdrop_path) {
+          imagesToPreload.push(tmdbService.getBackdropURL(movieDetails.backdrop_path));
+        }
+        
+        if (movieDetails.poster_path) {
+          imagesToPreload.push(tmdbService.getImageUrl(movieDetails.poster_path, 'w500'));
+        }
+
+        const castPhotos = creditsData.cast
+          ?.slice(0, 3)
+          .filter((actor: Cast) => actor.profile_path)
+          .map((actor: Cast) => tmdbService.getImageUrl(actor.profile_path!, 'w185')) || [];
+        imagesToPreload.push(...castPhotos);
+
+        const firstVideo = videosData.results?.filter((v: Video) => v.site === 'YouTube')[0];
+        if (firstVideo) {
+          imagesToPreload.push(`https://img.youtube.com/vi/${firstVideo.key}/hqdefault.jpg`);
+        }
+
+        await Promise.all(
+          imagesToPreload.map(src => {
+            return new Promise((resolve) => {
+              const img = new window.Image();
+              img.src = src;
+              img.onload = () => resolve(true);
+              img.onerror = () => resolve(false);
+              
+              // Timeout after 10 seconds to prevent infinite loading
+              setTimeout(() => resolve(false), 10000);
+            });
+          })
+        );
 
         if (movieDetails.backdrop_path) {
           extractColor(movieDetails.backdrop_path);
         }
 
-        // Calculate remaining time to ensure minimum 2.5 seconds loading
         const elapsedTime = Date.now() - startTime;
-        const minimumLoadingTime = 2500; // 2.5 seconds
+        const minimumLoadingTime = 2000; // 2 seconds minimum
         const remainingTime = Math.max(0, minimumLoadingTime - elapsedTime);
         
-        // Wait for remaining time before hiding loading screen
-        setTimeout(() => {
-          setLoading(false);
-        }, remainingTime);
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
+        
+        setImagesLoaded(true);
+        setLoading(false);
+        
       } catch (error) {
         console.error('Error fetching movie data:', error);
-        // Even on error, wait minimum time before showing error
         const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 2500 - elapsedTime);
-        setTimeout(() => {
-          setLoading(false);
-        }, remainingTime);
+        const remainingTime = Math.max(0, 1500 - elapsedTime);
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
+        
+        setLoading(false);
       }
     };
 
-    fetchMovieData();
+    fetchMovieDataAndPreloadImages();
   }, [movieId]);
 
   const extractColor = async (backdropPath: string) => {
@@ -147,12 +181,10 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
     }
   };
 
-  // Show loading screen during initial load
-  if (loading) {
+  if (loading || !imagesLoaded) {
     return <LoadingScreen />;
   }
 
-  // Show error state if movie failed to load
   if (!movie) {
     return (
       <div className={styles.page}>
