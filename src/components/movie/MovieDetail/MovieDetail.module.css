@@ -164,6 +164,10 @@
   transition: all 0.2s ease;
 }
 
+.bookmarkButton.activeStar svg path {
+  fill: #f5d505;
+}
+
 .playButton {
   padding: 0.75rem 2rem;
   border-radius: 8px;
