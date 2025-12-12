@@ -43,7 +43,7 @@ export function MovieHero({ movie }: MovieHeroProps) {
             <div className={styles.ratingBar}>
               <div 
                 className={styles.ratingFill} 
-                style={{ width: `${(movie.vote_average * 10) * 2.5}px` }}
+                style={{ width: `${(movie.vote_average * 8)}px` }}
               />
               <span className={styles.ratingText}>{Math.round(movie.vote_average * 10)}%</span>
             </div>
