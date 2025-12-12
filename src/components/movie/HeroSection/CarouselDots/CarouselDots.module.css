@@ -1,0 +1,30 @@
+.dots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 1;
+  position: relative;
+  padding-left: 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+  padding: 0;
+}
+
+.dot:hover {
+  background-color: white;
+  opacity: 0.8;
+}
+
+.dotActive {
+  background-color: white;
+  height: 30px;
+  border-radius: 5px;
+}
