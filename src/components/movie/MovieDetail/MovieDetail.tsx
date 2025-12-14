@@ -18,6 +18,13 @@ interface Cast {
   profile_path: string | null;
 }
 
+interface Crew {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+}
+
 interface Video {
   id: string;
   key: string;
@@ -33,6 +40,7 @@ interface MovieDetailPageProps {
 export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [cast, setCast] = useState<Cast[]>([]);
+  const [crew, setCrew] = useState<Crew[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -85,6 +93,7 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
 
         setMovie(movieDetails);
         setCast(creditsData.cast?.slice(0, 11) || []);
+        setCrew(creditsData.crew || []);
         setVideos(videosData.results?.filter((v: Video) => v.site === 'YouTube').slice(0, 3) || []);
 
         requestAnimationFrame(() => {
@@ -115,7 +124,7 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
       <BackdropGlow backdropPath={movie.backdrop_path} />
 
       <main className={styles.main}>
-        <MovieHero movie={movie} />
+        <MovieHero movie={movie} crew={crew} />
         <TrailersSection videos={videos} />
         <CastSection cast={cast} />
       </main>

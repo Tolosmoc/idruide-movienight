@@ -6,13 +6,38 @@ import { MovieDetails } from '@/types/movie';
 import { tmdbService } from '@/services/tmdb';
 import styles from './MovieHero.module.css';
 
-interface MovieHeroProps {
-  movie: MovieDetails;
+interface Crew {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
 }
 
-export function MovieHero({ movie }: MovieHeroProps) {
+interface MovieHeroProps {
+  movie: MovieDetails;
+  crew: Crew[];
+}
+
+export function MovieHero({ movie, crew }: MovieHeroProps) {
   const [activeStar, setActiveStar] = useState(false);
   const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+
+  const getCrewByJob = (job: string) => {
+    const member = crew.find(c => c.job === job);
+    return member ? member.name : 'N/A';
+  };
+
+  const director = getCrewByJob('Director');
+  
+  const writer = crew.find(c => 
+    c.job === 'Screenplay' || c.job === 'Writer' || c.job === 'Story'
+  )?.name || 'N/A';
+  
+  const producer = crew.find(c => 
+    c.job === 'Producer' || c.job === 'Executive Producer'
+  )?.name || 'N/A';
+  
+  const composer = getCrewByJob('Original Music Composer');
 
   return (
     <div className={styles.heroSection}>
@@ -78,19 +103,19 @@ export function MovieHero({ movie }: MovieHeroProps) {
           <div className={styles.credits}>
             <div className={styles.creditItem}>
               <span className={styles.creditLabel}>Réalisateur</span>
-              <span className={styles.creditValue}>Jeff Fowler</span>
+              <span className={styles.creditValue}>{director}</span>
             </div>
             <div className={styles.creditItem}>
               <span className={styles.creditLabel}>Scénariste</span>
-              <span className={styles.creditValue}>Josh Miller</span>
+              <span className={styles.creditValue}>{writer}</span>
             </div>
             <div className={styles.creditItem}>
               <span className={styles.creditLabel}>Production</span>
-              <span className={styles.creditValue}>Neal H. Moritz</span>
+              <span className={styles.creditValue}>{producer}</span>
             </div>
             <div className={styles.creditItem}>
               <span className={styles.creditLabel}>Musique</span>
-              <span className={styles.creditValue}>Tom Holkenborg</span>
+              <span className={styles.creditValue}>{composer}</span>
             </div>
           </div>
         </div>
