@@ -3,19 +3,27 @@
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/layout/Header/Header';
 import { MovieCard } from '@/components/movie/MovieCard/MovieCard';
-import { Movie } from '@/types/movie';
-import { useEffect, useState, useRef } from 'react';
+import { useMovieStore } from '@/store/movieStore';
+import { useEffect, useRef } from 'react';
 import styles from './results.module.css';
 
 export default function ResultsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [totalResults, setTotalResults] = useState(0);
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  // Using Zustand store
+  const {
+    searchResults,
+    searchTotalResults,
+    searchPage,
+    searchHasMore,
+    isSearching,
+    setSearchResults,
+    appendSearchResults,
+    setSearchQuery,
+    setIsSearching,
+    resetSearch
+  } = useMovieStore();
   
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -23,52 +31,60 @@ export default function ResultsContent() {
     const fetchInitialResults = async () => {
       if (!query) return;
       
-      setLoading(true);
+      // Reset search when query changes
+      resetSearch();
+      setSearchQuery(query);
+      setIsSearching(true);
+      
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=1`
         );
         const data = await response.json();
         
-        setMovies(data.results || []);
-        setTotalResults(data.total_results || 0);
-        setPage(1);
-        setHasMore(data.page < data.total_pages);
+        setSearchResults(
+          data.results || [],
+          data.total_results || 0,
+          1,
+          data.page < data.total_pages
+        );
       } catch (error) {
         console.error('Error fetching search results:', error);
       } finally {
-        setLoading(false);
+        setIsSearching(false);
       }
     };
 
     fetchInitialResults();
-  }, [query]);
+  }, [query, resetSearch, setSearchQuery, setSearchResults, setIsSearching]);
 
   const loadMore = async () => {
-    if (loading || !hasMore) return;
+    if (isSearching || !searchHasMore) return;
     
-    setLoading(true);
+    setIsSearching(true);
     try {
-      const nextPage = page + 1;
+      const nextPage = searchPage + 1;
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_TMDB_API_URL}/search/movie?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}&query=${encodeURIComponent(query)}&page=${nextPage}`
       );
       const data = await response.json();
       
-      setMovies(prev => [...prev, ...(data.results || [])]);
-      setPage(nextPage);
-      setHasMore(data.page < data.total_pages);
+      appendSearchResults(
+        data.results || [],
+        nextPage,
+        data.page < data.total_pages
+      );
     } catch (error) {
       console.error('Error loading more results:', error);
     } finally {
-      setLoading(false);
+      setIsSearching(false);
     }
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
+        if (entries[0].isIntersecting && searchHasMore && !isSearching) {
           loadMore();
         }
       },
@@ -85,7 +101,7 @@ export default function ResultsContent() {
         observer.unobserve(currentTarget);
       }
     };
-  }, [hasMore, loading, page, query]);
+  }, [searchHasMore, isSearching, searchPage, query]);
 
   return (
     <div className={styles.page}>
@@ -94,20 +110,20 @@ export default function ResultsContent() {
       <main className={styles.main}>
         <div className={styles.header}>
           <h1 className={styles.query}>{query}</h1>
-          <p className={styles.resultCount}>{totalResults} résultats</p>
+          <p className={styles.resultCount}>{searchTotalResults} résultats</p>
         </div>
 
         <div className={styles.grid}>
-          {movies.map((movie) => (
+          {searchResults.map((movie) => (
             <div key={`${movie.id}-${movie.title}`} className={styles.gridItem}>
               <MovieCard movie={movie} showRating={false} />
             </div>
           ))}
         </div>
 
-        {hasMore && (
+        {searchHasMore && (
           <div ref={observerTarget} className={styles.loadingContainer}>
-            {loading && (
+            {isSearching && (
               <div className={styles.spinner}>
                 <div className={styles.spinnerCircle}></div>
               </div>
@@ -115,13 +131,13 @@ export default function ResultsContent() {
           </div>
         )}
 
-        {!hasMore && movies.length > 0 && (
+        {!searchHasMore && searchResults.length > 0 && (
           <div className={styles.endMessage}>
             Tous les résultats ont été chargés
           </div>
         )}
 
-        {!loading && movies.length === 0 && (
+        {!isSearching && searchResults.length === 0 && (
           <div className={styles.noResults}>
             <p>Aucun résultat trouvé pour `{query}`</p>
           </div>

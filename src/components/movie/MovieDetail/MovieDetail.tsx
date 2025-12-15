@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MovieDetails } from '@/types/movie';
 import { tmdbService } from '@/services/tmdb';
+import { useMovieStore } from '@/store/movieStore';
 import { Header } from '@/components/layout/Header/Header';
 import { LoadingScreen } from '@/components/loading/LoadingScreen';
 import { BackdropGlow } from './BackdropGlow/BackdropGlow';
@@ -38,7 +38,13 @@ interface MovieDetailPageProps {
 }
 
 export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
-  const [movie, setMovie] = useState<MovieDetails | null>(null);
+  // Using Zustand store
+  const {
+    selectedMovie,
+    setSelectedMovie,
+    setIsLoadingMovieDetails
+  } = useMovieStore();
+  
   const [cast, setCast] = useState<Cast[]>([]);
   const [crew, setCrew] = useState<Crew[]>([]);
   const [videos, setVideos] = useState<Video[]>([]);
@@ -46,6 +52,8 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
 
   useEffect(() => {
     const fetchAndPrepare = async () => {
+      setIsLoadingMovieDetails(true);
+      
       try {
         const [movieDetails, creditsData, videosData] = await Promise.all([
           tmdbService.getMovieDetails(movieId),
@@ -91,7 +99,8 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
           })
         );
 
-        setMovie(movieDetails);
+        // Store movie details in Zustand
+        setSelectedMovie(movieDetails);
         setCast(creditsData.cast?.slice(0, 11) || []);
         setCrew(creditsData.crew || []);
         setVideos(videosData.results?.filter((v: Video) => v.site === 'YouTube').slice(0, 3) || []);
@@ -100,6 +109,7 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
           requestAnimationFrame(() => {
             setTimeout(() => {
               setIsReady(true);
+              setIsLoadingMovieDetails(false);
             }, 100);
           });
         });
@@ -107,13 +117,14 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
       } catch (error) {
         console.error('Error fetching movie data:', error);
         setIsReady(true);
+        setIsLoadingMovieDetails(false);
       }
     };
 
     fetchAndPrepare();
-  }, [movieId]);
+  }, [movieId, setSelectedMovie, setIsLoadingMovieDetails]);
 
-  if (!isReady || !movie) {
+  if (!isReady || !selectedMovie) {
     return <LoadingScreen />;
   }
 
@@ -121,10 +132,10 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
     <div className={styles.page}>
       <Header />
       
-      <BackdropGlow backdropPath={movie.backdrop_path} />
+      <BackdropGlow backdropPath={selectedMovie.backdrop_path} />
 
       <main className={styles.main}>
-        <MovieHero movie={movie} crew={crew} />
+        <MovieHero movie={selectedMovie} crew={crew} />
         <TrailersSection videos={videos} />
         <CastSection cast={cast} />
       </main>
