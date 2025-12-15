@@ -14,14 +14,12 @@ export function SearchBar() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   
-  // Using Zustand store
   const { 
     searchQuery, 
     setSearchQuery,
     setIsSearching 
   } = useMovieStore();
   
-  // Local state for suggestions dropdown
   const [suggestions, setSuggestions] = useState<Movie[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
@@ -44,7 +42,6 @@ export function SearchBar() {
         
         setSuggestions(data.results.slice(0, 6));
         setTotalResults(data.total_results || 0);
-        // Only open dropdown if input is focused
         if (isFocused && data.results.length > 0) {
           setIsOpen(true);
         }
@@ -105,7 +102,7 @@ export function SearchBar() {
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={() => {
             setIsFocused(true);
-            // Re-open dropdown if there are suggestions and query is valid
+            
             if (searchQuery.length > 2 && suggestions.length > 0) {
               setIsOpen(true);
             }
@@ -125,7 +122,6 @@ export function SearchBar() {
         <div 
           className={styles.suggestionsDropdown}
           onMouseDown={(e) => {
-            // Prevent blur when clicking inside dropdown
             e.preventDefault();
           }}
         >

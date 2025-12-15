@@ -11,7 +11,6 @@ export default function ResultsContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   
-  // Using Zustand store
   const {
     searchResults,
     searchTotalResults,
@@ -31,7 +30,6 @@ export default function ResultsContent() {
     const fetchInitialResults = async () => {
       if (!query) return;
       
-      // Reset search when query changes
       resetSearch();
       setSearchQuery(query);
       setIsSearching(true);

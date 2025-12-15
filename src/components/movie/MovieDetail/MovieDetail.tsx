@@ -38,7 +38,6 @@ interface MovieDetailPageProps {
 }
 
 export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
-  // Using Zustand store
   const {
     selectedMovie,
     setSelectedMovie,
@@ -98,8 +97,7 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
             });
           })
         );
-
-        // Store movie details in Zustand
+        
         setSelectedMovie(movieDetails);
         setCast(creditsData.cast?.slice(0, 11) || []);
         setCrew(creditsData.crew || []);

@@ -2,25 +2,20 @@ import { create } from "zustand";
 import { Movie, MovieDetails } from "@/types/movie";
 
 interface MovieState {
-    // Search state
     searchResults: Movie[];
     searchQuery: string;
     searchTotalResults: number;
     searchPage: number;
     searchHasMore: boolean;
     
-    // Movie details state
     selectedMovie: MovieDetails | null;
     
-    // Home page state
     trendingMovies: Movie[];
     topRatedMovies: Movie[];
     
-    // Loading states
     isSearching: boolean;
     isLoadingMovieDetails: boolean;
     
-    // Actions
     setSearchResults: (movies: Movie[], totalResults: number, page: number, hasMore: boolean) => void;
     appendSearchResults: (movies: Movie[], page: number, hasMore: boolean) => void;
     setSearchQuery: (query: string) => void;
@@ -33,7 +28,6 @@ interface MovieState {
 }
 
 export const useMovieStore = create<MovieState>((set) => ({
-    // Initial state
     searchResults: [],
     searchQuery: "",
     searchTotalResults: 0,
@@ -45,7 +39,6 @@ export const useMovieStore = create<MovieState>((set) => ({
     isSearching: false,
     isLoadingMovieDetails: false,
     
-    // Actions
     setSearchResults: (movies, totalResults, page, hasMore) => 
         set({ 
             searchResults: movies, 
