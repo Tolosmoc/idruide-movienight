@@ -75,15 +75,17 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
         }
 
         const castPhotos = creditsData.cast
-          ?.slice(0, 3)
+          ?.slice(0, 11)
           .filter((actor: Cast) => actor.profile_path)
           .map((actor: Cast) => tmdbService.getImageUrl(actor.profile_path!, 'w185')) || [];
         imagesToPreload.push(...castPhotos);
 
-        const firstVideo = videosData.results?.filter((v: Video) => v.site === 'YouTube')[0];
-        if (firstVideo) {
-          imagesToPreload.push(`https://img.youtube.com/vi/${firstVideo.key}/hqdefault.jpg`);
-        }
+        const youtubeVideos = videosData.results
+          ?.filter((v: Video) => v.site === 'YouTube')
+          .slice(0, 3) || [];  // ✅ Les 3 vidéos affichées
+        youtubeVideos.forEach((video: Video) => {
+          imagesToPreload.push(`https://img.youtube.com/vi/${video.key}/hqdefault.jpg`);
+        });
 
         await Promise.all(
           imagesToPreload.map(src => {
@@ -97,7 +99,7 @@ export function MovieDetailPage({ movieId }: MovieDetailPageProps) {
             });
           })
         );
-        
+
         setSelectedMovie(movieDetails);
         setCast(creditsData.cast?.slice(0, 11) || []);
         setCrew(creditsData.crew || []);
